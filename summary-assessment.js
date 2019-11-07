@@ -59,7 +59,9 @@ function each(coll, f) {
   //wordLengths("hello its me") // [5,3,2]
   
   function wordLengths(str) {
-      // TODO: your code here 
+    return map(str.split(' '), function(element, i){
+      return element.length;
+    })
   }
   
   //=============================================================================
@@ -72,7 +74,11 @@ function each(coll, f) {
   // countOccurrences("hello, world!", "l"); // 3
   
   function countOccurrences(string, character) {
-      // your code is here
+    var result = 0;
+    each(string.split(''), function(element, i){
+      (element === character) ? result++ : null;
+    });
+    return result;
   }
   
   //=============================================================================
@@ -84,7 +90,9 @@ function each(coll, f) {
   // wordsLongerThanThree("Hello Mad World") //["Hello", "World"]
   
   function wordsLongerThanThree(str) {
-      // TODO: your code here 
+    return filter(str.split(' '), function(element, i){
+      return element.length > 3;
+    });
   }
   
   //=============================================================================
@@ -99,7 +107,10 @@ function each(coll, f) {
   //repeatString('dog', 3); // => 'dog' + 'dog' + 'dog' => 'dogdogdog'
   
   function repeatString(str, count) { 
-   // TODO: your code here 
+    if(count === 0){
+      return '';
+    }
+    return str + '' + repeatString(str, --count)
   } 
    
   
@@ -122,13 +133,46 @@ function each(coll, f) {
   // pizza.addIngredients("tomato");
   // pizza.addIngredients("meshroom");
   // pizza.addIngredients("meat");
-  // console.log(pizza.displayIngredaints());
+  /*
+      console.log(pizza.displayIngredients()); not console.log(pizza.displayIngredaints());
+  */
+  
   // pizza.bakePizza();
   // pizza.eatSlice();
   // pizza.eatSlice();
   // pizza.eatSlice();
   
   // Write your code here .....
+
+  function makePizza(crust, size, numberOfSlice){
+      var crust = crust; // "thin","thick". 
+      var size = size; //a property represented by a string. ex "M","L".
+      var numberOfSlice = numberOfSlice;
+      var ingredients = [];
+      return {
+        addIngredients: function(ingredient){
+          ingredients.push(ingredient);
+        },
+        displayIngredients: function(){
+          return ingredients.join(',');
+        },
+        bakePizza: function(){
+          setTimeout(function(){
+            console.log(`Your ${crust} ${size} ${numberOfSlice} slice pizza is done`);
+          }, 2000);
+        },
+        eatSlice: function(){
+          if(numberOfSlice === 1){
+            --numberOfSlice;
+            return `you eat the last slice`;
+          } else if(numberOfSlice > 1){
+            --numberOfSlice;
+            return `you eat a slice and still have ${numberOfSlice}`;
+          }
+          return `sorry, you don't have any pizza`;
+        }
+      }
+  }
   
   //=============================================================================
   /*                                  Q6                                      */
@@ -153,8 +197,50 @@ function each(coll, f) {
   */
   
   // Now, to make sure that you are actually reading, make a comment below this and type: Yes I am
+  //yes I am
   
   // Write your code here .....
+
+  function ReadingList(){
+    return {
+      read: 0,
+      unRead: 0,
+      toRead: [],
+      currentRead: undefined,
+      readBooks: [], // books names
+      addBook: addBook,
+      finishCurrentBook: finishCurrentBook
+    }
+  }
+
+  function addBook(bookName){
+    if(this.currentRead === undefined){
+      /*if there was not a book before so this book
+      will be the current book 
+      and will not pushtoRead book*/
+      this.currentRead = bookName;
+      this.unRead = this.unRead + 1;
+    } else {
+      this.toRead.push(bookName);
+      this.unRead = this.unRead + 1;
+    }
+  }
+
+  function finishCurrentBook(){
+    if(this.unRead === 0){
+      /*
+      if there isn't any book to read 
+      user will need to add book first
+      */
+      this.currentRead = undefined;
+      return 'add book before';
+    }
+    this.readBooks.push(this.currentRead);
+    this.read = this.read + 1;
+    this.currentRead = this.toRead[0];
+    this.toRead = this.toRead.slice(1, this.toRead.length);
+    this.unRead = this.unRead - 1;
+  }
   
   //=============================================================================
   /*                                  Q7                                       */
@@ -175,6 +261,39 @@ function each(coll, f) {
   //  safe('money','small') => "watch gold-bar money"
   
   // Write your code here .....
+
+  function makeSafe(initial){
+    var items = [];
+    var size = initial;
+    var usedStorage = 0;
+    function addItem (item, itemSize){ //itemSize "big 3", "medium 2" and "small 1"
+      var used;
+      if(itemSize === 'big'){
+        used = 3;
+      }
+      if(itemSize === 'medium'){
+        used = 2;
+      }
+      if(itemSize === 'small'){
+        used = 1;
+      }
+
+      if(size - usedStorage < used){
+        return "Can't fit";
+      }
+
+      if(size - usedStorage >= used){
+        items.push(item);
+        usedStorage += used;   
+      }      
+
+      if(usedStorage === size){ 
+        return items.join(', ') + ' .';
+      }
+    }
+
+    return addItem;
+  }
   
   //=============================================================================
   /*                                  Q8                                       */
@@ -190,6 +309,8 @@ function each(coll, f) {
   //Do not add a list item if the color value is non of the colors
   
   //DO NOT USE JQUERY
+
+  /////q8 file
   
   //================================================================================
   /*                              Q9                                            */
